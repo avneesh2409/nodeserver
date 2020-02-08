@@ -9,16 +9,15 @@ var storage = multer.diskStorage({
     cb(null, 'uploads/')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname + '-' + Date.now())
+    cb(null, Date.now() + '-'+file.originalname)
   }
 })
 
 var upload = multer({ storage: storage })
 
 router.get('/', (req, res) => {
-  console.log(req)
-  res.status(200).json({
-    message: "we got your request"
+  res.json({
+    message: "got it"
   });
 });
 
@@ -31,11 +30,20 @@ router.post('/login', function (req, res) {
 
 
 router.post('/register', upload.array('file', 5), function (req, res) {
-  console.log(req.body)
-  res.json({
-    message: "successfully registered",
-    data: req.files
-  });
+let path = {}
+for(const i of req.files)
+{
+	path[i.filename] = req.rawHeaders[1]+'/uploads/image?image='+i.filename
+}
+console.log(path)
+if(req.files){
+   res.status(200).json({
+url:path
+})
+}
+else{
+res.status(400).send("error")
+}
 });
 
 module.exports = router;
