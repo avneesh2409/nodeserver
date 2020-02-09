@@ -33,7 +33,7 @@ router.post('/register', upload.array('file', 5), function (req, res) {
 let path = {}
 for(const i of req.files)
 {
-	path[i.filename] = req.rawHeaders[1]+'/uploads/image?image='+i.filename
+	path[i.originalname] = req.rawHeaders[1]+'/uploads/image?image='+i.filename
 }
 console.log(path)
 if(req.files){
